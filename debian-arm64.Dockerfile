@@ -2,17 +2,19 @@ FROM --platform=arm64 debian:bookworm-slim as build
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
-# Install libraries needed to compile box
-RUN apt-get update \
- && apt-get install -y --no-install-recommends --no-install-suggests git curl cmake python3 build-essential gcc-arm-linux-gnueabihf libc6-dev-armhf-cross ca-certificates 
-
 WORKDIR /root
 
-# download steam cmd
-RUN curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - && chmod 750 ./steamcmd/steamcmd.sh
+# Install libraries and download steam cmd
+RUN set -eux; \
+ apt-get update && apt-get install -y --no-install-recommends --no-install-suggests curl \
+ && curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - \
+ && chmod 750 ./steamcmd/steamcmd.sh
 
-# Build box64
-RUN git clone https://github.com/ptitSeb/box64 \
+# Install libraries and Build box64
+RUN set -eux; \
+ apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
+    git cmake python3 build-essential ca-certificates \
+ && git clone https://github.com/ptitSeb/box64 \
  && mkdir box64/build \
  && cd box64/build \
  && cmake .. -DRPI4ARM64=1 -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo \
