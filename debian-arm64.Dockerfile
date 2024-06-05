@@ -11,7 +11,8 @@ RUN set -eux; \
 
 # Download steam cmd
 RUN set -eux; \
- wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - \
+ mkdir steamcmd; \
+ wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -C /root/steamcmd - \
  && chmod 750 ./steamcmd/steamcmd.sh
 
 # Build box64
@@ -99,7 +100,7 @@ RUN set -eux; \
     chmod 750 /home/stean/healthz.sh /home/stean/init-server.sh
 
 # Copy steamcmd
-COPY --from=build --chown=steam:steam /steamcmd /home/steam
+COPY --from=build --chown=steam:steam /root/steamcmd /home/steam
 
 VOLUME ["/vrising/server", "/vrising/data"]
 
