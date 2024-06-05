@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND="noninteractive"
 
 # Install libraries needed to compile box
 RUN apt-get update \
- && apt-get install -y --no-install-recommends --no-install-suggests git cmake python3 build-essential gcc-arm-linux-gnueabihf libc6-dev-armhf-cross ca-certificates 
+ && apt-get install -y --no-install-recommends --no-install-suggests git curl cmake python3 build-essential gcc-arm-linux-gnueabihf libc6-dev-armhf-cross ca-certificates 
 
 WORKDIR /root
 
