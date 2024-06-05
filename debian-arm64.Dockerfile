@@ -9,7 +9,7 @@ RUN apt-get update \
 WORKDIR /root
 
 # download steam cmd
-RUN curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -C /steamcmd - && chmod 750 /steamcmd/steamcmd.sh
+RUN curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - && chmod 750 ./steamcmd/steamcmd.sh
 
 # Build box64
 RUN git clone https://github.com/ptitSeb/box64 \
