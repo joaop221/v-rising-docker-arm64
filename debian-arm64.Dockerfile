@@ -4,17 +4,19 @@ ENV DEBIAN_FRONTEND="noninteractive"
 
 WORKDIR /root
 
-# Install libraries and download steam cmd
-RUN set -eux; \
- apt-get update && apt-get install -y --no-install-recommends --no-install-suggests curl \
- && curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - \
- && chmod 750 ./steamcmd/steamcmd.sh
-
-# Install libraries and Build box64
+# install required packages
 RUN set -eux; \
  apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
-    git cmake python3 build-essential ca-certificates \
- && git clone https://github.com/ptitSeb/box64 \
+    git cmake python3 build-essential ca-certificates wget software-properties-common
+
+# Download steam cmd
+RUN set -eux; \
+ wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - \
+ && chmod 750 ./steamcmd/steamcmd.sh
+
+# Build box64
+RUN set -eux; \
+ git clone https://github.com/ptitSeb/box64 \
  && mkdir box64/build \
  && cd box64/build \
  && cmake .. -DRPI4ARM64=1 -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -38,7 +40,7 @@ COPY --from=build /box /
 # If you are sure you don't need it, feel free to remove
 RUN set -eux \
  && apt-get update \
- && apt install -y cabextract xvfb \
+ && apt install -y wget cabextract xvfb \
  && apt-get -y autoremove \
  && apt-get clean autoclean \
  && rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists
