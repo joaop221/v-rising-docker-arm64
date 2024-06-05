@@ -11,9 +11,9 @@ RUN set -eux; \
 
 # Download steam cmd
 RUN set -eux; \
- mkdir steamcmd; \
- wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf -C /root/steamcmd - \
- && chmod 750 ./steamcmd/steamcmd.sh
+ mkdir steamcmd && cd steamcmd; \
+ wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - \
+ && chmod 750 ./steamcmd.sh && cd ..
 
 # Build box64
 RUN set -eux; \
