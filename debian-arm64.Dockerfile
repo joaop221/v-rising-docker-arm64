@@ -9,9 +9,8 @@ RUN set -eux; \
  apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
     git cmake python3 build-essential ca-certificates wget software-properties-common; \
  mkdir steamcmd && cd steamcmd; \
- wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - \
- chmod 750 ./steamcmd.sh && cd ..; \
- git clone https://github.com/ptitSeb/box64; \
+ wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - && chmod 750 ./steamcmd.sh; \
+ cd .. && git clone https://github.com/ptitSeb/box64; \
  mkdir box64/build && cd box64/build; \
  cmake .. -DRPI4ARM64=1 -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo; \
  make -j$(nproc) && make install DESTDIR=/box
