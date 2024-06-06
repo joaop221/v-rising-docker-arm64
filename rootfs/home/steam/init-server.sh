@@ -46,8 +46,12 @@ if [ ! -r "$server" ] || [ ! -w "$server" ]; then
 fi
 
 echo "Starting V Rising Dedicated Server"
-echo "Trying to remove /tmp/.X0-lock"
-rm /tmp/.X0-lock 2>&1
+
+if [ -f "/tmp/.X0-lock" ]; then
+	echo "Trying to remove /tmp/.X0-lock"
+	rm /tmp/.X0-lock 2>&1
+fi
+
 echo " "
 echo "Starting Xvfb"
 Xvfb :0 -screen 0 1024x768x16 &
