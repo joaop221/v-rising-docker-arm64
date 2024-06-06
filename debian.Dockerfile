@@ -41,7 +41,7 @@ ARG wine_tag="-1"
 #   If you are sure you don't need it, feel free to remove
 # - wine64 and winetricks - ref https://github.com/ptitSeb/box64/blob/main/docs/X64WINE.md#examples for win64
 RUN set -eux; \
- apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
+    dpkg --add-architecture i386 && apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
     lib32gcc-s1 wget ca-certificates cabextract xvfb libasound2-plugins:arm64 libasound2:arm64 libc6:arm64 \
     libcapi20-3:arm64 libcups2:arm64 libdbus-1-3:arm64 libfontconfig1:arm64 libfreetype6:arm64 libglib2.0-0:arm64 \
     libglu1-mesa:arm64 libgnutls30:arm64 libgphoto2-6:arm64 libgphoto2-port12:arm64 libgsm1:arm64 \
