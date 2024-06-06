@@ -30,7 +30,7 @@ ARG dist="bookworm"
 # see: https://dl.winehq.org/wine-builds/<ID>/dists/<DIST>/main/binary-amd64/ - e.g.:
 # - https://dl.winehq.org/wine-builds/debian/dists/bookworm/main/binary-amd64/
 # - https://dl.winehq.org/wine-builds/debian/dists/bullseye/main/binary-amd64/
-ARG wine_version="9.0.0.0"
+ARG wine_version="7.0.2"
 # devel, staging, or stable
 ARG wine_branch="stable"
 # : -1 (some wine .deb files have -1 tag on the end and some don't)
