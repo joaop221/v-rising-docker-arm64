@@ -56,8 +56,8 @@ RUN set -eux; \
  DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${dist}${wine_tag}_amd64.deb"; \
  DEB_A2="wine-${wine_branch}_${wine_version}~${dist}${wine_tag}_amd64.deb"; \
  echo -e "Downloading wine . . ."; \
- wget -q ${LNKA}${DEB_A1}; \
- wget -q ${LNKA}${DEB_A2}; \
+ wget ${LNKA}${DEB_A1}; \
+ wget ${LNKA}${DEB_A2}; \
  echo -e "Extracting wine . . ."; \
  dpkg-deb -x ${DEB_A1} wine-installer; \
  dpkg-deb -x ${DEB_A2} wine-installer; \
