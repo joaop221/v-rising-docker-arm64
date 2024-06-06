@@ -3,6 +3,18 @@
 server=/vrising/server
 data=/vrising/data
 
+# check user
+if [ $(id -u) -eq 0 ]; then
+	echo "WARNING: Run steamcmd with root user is a security risk. see: https://developer.valvesoftware.com/wiki/SteamCMD" >&2
+	echo "TIP: This image provides steam user with uid($(id steam -u)) and gid($(id steam -g)) as default"
+fi
+
+# Check if we have proper read/write permissions
+if [ ! -r "$server" ] || [ ! -w "$server" ]; then
+    echo "ERROR: I do not have read/write permissions to $server! Please run "chown -R $(id -u):$(id -g) $server" on host machine, then try again." >&2
+    exit 1
+fi
+
 term_handler() {
 	echo "Shutting down Server"
 
@@ -23,8 +35,7 @@ trap 'term_handler' SIGTERM
 echo " "
 echo "Updating V-Rising Dedicated Server files..."
 echo " "
-LD_LIBRARY_PATH="/home/steam/linux32/" box86 /home/steam/linux32/steamcmd \
-  +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
+LD_LIBRARY_PATH="/home/steam/linux32/" box86 /home/steam/linux32/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
 echo "steam_appid: $(cat "$server/steam_appid.txt")"
 echo " "
 
@@ -36,12 +47,6 @@ fi
 if [ ! -f "$data/Settings/ServerHostSettings.json" ]; then
 	echo "$data/Settings/ServerHostSettings.json not found. Copying default file."
 	cp "$server/VRisingServer_Data/StreamingAssets/Settings/ServerHostSettings.json" "$data/Settings/" 2>&1
-fi
-
-# Check if we have proper read/write permissions
-if [ ! -r "$server" ] || [ ! -w "$server" ]; then
-    echo "ERROR: I do not have read/write permissions to $server! Please run "chown -R ${UID}:${GID} $server" on host machine, then try again."
-    exit 1
 fi
 
 echo "Starting V Rising Dedicated Server"
