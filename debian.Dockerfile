@@ -50,7 +50,7 @@ ARG wine_tag="-1"
 # - wine64 and winetricks - ref https://github.com/ptitSeb/box64/blob/main/docs/X64WINE.md#examples for win64
 RUN set -eux; \
  dpkg --add-architecture armhf && apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
-    wget ca-certificates cabextract xvfb \
+    wget ca-certificates cabextract xvfb locales \
     libc6:armhf libstdc++6:armhf libasound2-plugins:arm64 libasound2:arm64 libc6:arm64 \
     libcapi20-3:arm64 libcups2:arm64 libdbus-1-3:arm64 libfontconfig1:arm64 libfreetype6:arm64 libglib2.0-0:arm64 \
     libglu1-mesa:arm64 libgnutls30:arm64 libgphoto2-6:arm64 libgphoto2-port12:arm64 libgsm1:arm64 \
@@ -60,6 +60,7 @@ RUN set -eux; \
     libv4l-0:arm64 libx11-6:arm64 libxcomposite1:arm64 libxcursor1:arm64 libxext6:arm64 libxfixes3:arm64 \
     libxi6:arm64 libxinerama1:arm64 libxrandr2:arm64 libxrender1:arm64 libxslt1.1:arm64 libxxf86vm1:arm64 \
     ocl-icd-libopencl1:arm64; \
+ locale-gen en_US.UTF-8; \
  LNKA="https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/main/binary-amd64/"; \
  DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
  DEB_A2="wine-${wine_branch}_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
@@ -81,7 +82,10 @@ RUN set -eux; \
  ln -s ~/wine/bin/wineboot /usr/local/bin/wineboot; \
  ln -s ~/wine/bin/winecfg /usr/local/bin/winecfg; \
  chmod +x /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
- 
+
+ENV LANG 'en_US.UTF-8'
+ENV LANGUAGE 'en_US:en'
+
 ARG UID=1001
 ARG GID=1001
  
