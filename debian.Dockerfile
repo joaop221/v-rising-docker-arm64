@@ -1,4 +1,6 @@
-FROM --platform=arm64 debian:bookworm-slim as build
+ARG debian_version=bookworm
+
+FROM debian:${debian_version}-slim as build
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
@@ -15,7 +17,7 @@ RUN set -eux; \
  cmake .. -DRPI4ARM64=1 -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo; \
  make -j$(nproc) && make install DESTDIR=/box
 
-FROM --platform=arm64 debian:bookworm-slim
+FROM debian:${debian_version}-slim
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
@@ -26,7 +28,7 @@ ADD rootfs /
 # supported: debian, ubuntu
 ARG id="debian"
 # dist names: (for debian): bullseye, buster, jessie, wheezy, ${VERSION_CODENAME}, etc 
-ARG dist="bookworm"
+ARG dist="${debian_version}"
 # see: https://dl.winehq.org/wine-builds/<ID>/dists/<DIST>/main/binary-amd64/ - e.g.:
 # - https://dl.winehq.org/wine-builds/debian/dists/bookworm/main/binary-amd64/
 # - https://dl.winehq.org/wine-builds/debian/dists/bullseye/main/binary-amd64/
