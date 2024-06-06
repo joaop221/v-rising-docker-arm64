@@ -8,14 +8,22 @@ WORKDIR /root
 
 # install required packages, build box64 and download steam cmd
 RUN set -eux; \
- apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
-    git cmake python3 build-essential ca-certificates wget software-properties-common; \
+ dpkg --add-architecture armhf && apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
+    git cmake wget python3 build-essential gcc-arm-linux-gnueabihf libc6-dev-armhf-cross libc6:armhf libstdc++6:armhf ca-certificates; \
  mkdir steamcmd && cd steamcmd; \
- wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - && chmod 750 ./steamcmd.sh; \
- cd .. && git clone https://github.com/ptitSeb/box64; \
- mkdir box64/build && cd box64/build; \
- cmake .. -DRPI4ARM64=1 -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo; \
- make -j$(nproc) && make install DESTDIR=/box
+ wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - && cd ..; \
+ git clone https://github.com/ptitSeb/box86 \
+ && mkdir box86/build \
+ && cd box86/build \
+ && cmake .. -DRPI4ARM64=1 -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+ && make -j$(nproc) \
+ && make install DESTDIR=/box; \
+ git clone https://github.com/ptitSeb/box64 \
+ && mkdir box64/build \
+ && cd box64/build \
+ && cmake .. -DRPI4ARM64=1 -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+ && make -j$(nproc) \
+ && make install DESTDIR=/box
 
 FROM debian:${debian_version}-slim
 
@@ -41,8 +49,9 @@ ARG wine_tag="-1"
 #   If you are sure you don't need it, feel free to remove
 # - wine64 and winetricks - ref https://github.com/ptitSeb/box64/blob/main/docs/X64WINE.md#examples for win64
 RUN set -eux; \
-    dpkg --add-architecture i386 && apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
-    libc6:i386 wget ca-certificates cabextract xvfb libasound2-plugins:arm64 libasound2:arm64 libc6:arm64 \
+ dpkg --add-architecture armhf && apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
+    wget ca-certificates cabextract xvfb \
+    libc6:armhf libstdc++6:armhf libasound2-plugins:arm64 libasound2:arm64 libc6:arm64 \
     libcapi20-3:arm64 libcups2:arm64 libdbus-1-3:arm64 libfontconfig1:arm64 libfreetype6:arm64 libglib2.0-0:arm64 \
     libglu1-mesa:arm64 libgnutls30:arm64 libgphoto2-6:arm64 libgphoto2-port12:arm64 libgsm1:arm64 \
     libgssapi-krb5-2:arm64 libgstreamer-plugins-base1.0-0:arm64 libgstreamer1.0-0:arm64 libjpeg62-turbo:arm64 \

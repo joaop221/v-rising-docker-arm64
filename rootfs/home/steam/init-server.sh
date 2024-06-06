@@ -25,7 +25,8 @@ trap 'term_handler' SIGTERM
 echo " "
 echo "Updating V-Rising Dedicated Server files..."
 echo " "
-/home/steam/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
+LD_LIBRARY_PATH="/home/steam/steamcmd/linux32/:$LD_LIBRARY_PATH" box86 /home/steam/linux32/steamcmd \
+  +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
 echo "steam_appid: $(cat "$server/steam_appid.txt")"
 echo " "
 
