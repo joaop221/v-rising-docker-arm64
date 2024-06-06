@@ -25,6 +25,7 @@ LABEL maintainer="joaop221"
 
 ADD rootfs /
 
+ARG debian_version=bookworm
 # see: https://dl.winehq.org/wine-builds/debian/dists/<debian_version>/main/binary-amd64/ - e.g.:
 # - https://dl.winehq.org/wine-builds/debian/dists/bookworm/main/binary-amd64/
 # - https://dl.winehq.org/wine-builds/debian/dists/bullseye/main/binary-amd64/
