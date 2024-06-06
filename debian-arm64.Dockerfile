@@ -62,18 +62,15 @@ RUN set -eux; \
     LNKA="https://dl.winehq.org/wine-builds/${id}/dists/${dist}/main/binary-amd64/"; \
     DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${dist}${tag}_amd64.deb"; \
     DEB_A2="wine-${wine_branch}_${wine_version}~${dist}${tag}_amd64.deb"; \
-    DEB_A3="winehq-${wine_branch}_${wine_version}~${dist}${tag}_amd64.deb"; \
     echo -e "Downloading wine . . ."; \
     wget -q ${LNKA}${DEB_A1}; \
     wget -q ${LNKA}${DEB_A2}; \
-    wget -q ${LNKB}${DEB_B1}; \
     echo -e "Extracting wine . . ."; \
     dpkg-deb -x ${DEB_A1} wine-installer; \
     dpkg-deb -x ${DEB_A2} wine-installer; \
-    dpkg-deb -x ${DEB_B1} wine-installer; \
     echo -e "Installing wine . . ."; \
     mv wine-installer/opt/wine* ~/wine; \
-    rm -rf ${DEB_A1} ${DEB_A2} ${DEB_B1}; \
+    rm -rf ${DEB_A1} ${DEB_A2}; \
     apt-get install -y \
         libasound2-plugins:arm64 libasound2:arm64 libc6:arm64 libcapi20-3:arm64 libcups2:arm64 libdbus-1-3:arm64 libfontconfig1:arm64 \
         libfreetype6:arm64 libglib2.0-0:arm64 libglu1-mesa:arm64 libgnutls30:arm64 libgphoto2-6:arm64 libgphoto2-port12:arm64 libgsm1:arm64 \
