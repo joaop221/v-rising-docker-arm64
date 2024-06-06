@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eux
+
 server=/vrising/server
 data=/vrising/data
 
