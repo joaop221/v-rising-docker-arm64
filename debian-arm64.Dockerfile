@@ -80,7 +80,7 @@ ARG GID=1001
 # Install packages and Setup steam user
 RUN set -eux; \
     groupadd -g ${GID} steam && useradd -u ${UID} -m steam -g steam; \
-    chmod 750 /home/stean/healthz.sh /home/stean/init-server.sh
+    chmod 750 /home/steam/healthz.sh /home/steam/init-server.sh
 
 # Copy compiled box64 binaries
 COPY --from=build /box /
