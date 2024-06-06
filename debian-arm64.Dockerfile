@@ -32,9 +32,6 @@ LABEL maintainer="joaop221"
 
 ADD rootfs /
 
-# Copy compiled box64 binaries
-COPY --from=build /box /
-
 # Install libraries needed to run box
 # `cabextract` is needed by winetricks to install most libraries
 # `xvfb` is needed in wine to spawn display window because some Windows program can't run without it (using `xvfb-run`)
@@ -96,6 +93,8 @@ RUN set -eux; \
     groupadd -g ${GID} steam && useradd -u ${UID} -m steam -g steam; \
     chmod 750 /home/stean/healthz.sh /home/stean/init-server.sh
 
+# Copy compiled box64 binaries
+COPY --from=build /box /
 # Copy steamcmd
 COPY --from=build --chown=steam:steam /root/steamcmd /home/steam
 
