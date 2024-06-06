@@ -25,11 +25,7 @@ LABEL maintainer="joaop221"
 
 ADD rootfs /
 
-# supported: debian, ubuntu
-ARG id="debian"
-# dist names: (for debian): bullseye, buster, jessie, wheezy, ${VERSION_CODENAME}, etc 
-ARG dist="${debian_version}"
-# see: https://dl.winehq.org/wine-builds/<ID>/dists/<DIST>/main/binary-amd64/ - e.g.:
+# see: https://dl.winehq.org/wine-builds/debian/dists/<debian_version>/main/binary-amd64/ - e.g.:
 # - https://dl.winehq.org/wine-builds/debian/dists/bookworm/main/binary-amd64/
 # - https://dl.winehq.org/wine-builds/debian/dists/bullseye/main/binary-amd64/
 ARG wine_version="9.0.0.0"
@@ -54,9 +50,9 @@ RUN set -eux; \
     libv4l-0:arm64 libx11-6:arm64 libxcomposite1:arm64 libxcursor1:arm64 libxext6:arm64 libxfixes3:arm64 \
     libxi6:arm64 libxinerama1:arm64 libxrandr2:arm64 libxrender1:arm64 libxslt1.1:arm64 libxxf86vm1:arm64 \
     ocl-icd-libopencl1:arm64; \
- LNKA="https://dl.winehq.org/wine-builds/${id}/dists/${dist}/main/binary-amd64/"; \
- DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${dist}${wine_tag}_amd64.deb"; \
- DEB_A2="wine-${wine_branch}_${wine_version}~${dist}${wine_tag}_amd64.deb"; \
+ LNKA="https://dl.winehq.org/wine-builds/${id}/dists/${debian_version}/main/binary-amd64/"; \
+ DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
+ DEB_A2="wine-${wine_branch}_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
  echo -e "Downloading wine . . ."; \
  wget ${LNKA}${DEB_A1}; \
  wget ${LNKA}${DEB_A2}; \
