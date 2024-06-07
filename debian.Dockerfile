@@ -80,13 +80,13 @@ RUN set -eux; \
  dpkg-deb -x ${DEB_A1} wine-installer; \
  dpkg-deb -x ${DEB_A2} wine-installer; \
  echo -e "Installing wine . . ."; \
- mv wine-installer/opt/wine* ~/wine; \
+ mv wine-installer/opt/wine* /opt/wine; \
  rm -rf ${DEB_A1} ${DEB_A2}; \
  wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
  chmod +x winetricks; \
  mv winetricks /usr/local/bin/; \
- ln -s ~/wine/bin/wineboot /usr/local/bin/wineboot; \
- ln -s ~/wine/bin/winecfg /usr/local/bin/winecfg
+ ln -s /opt/wine/bin/wineboot /usr/local/bin/wineboot; \
+ ln -s /opt/wine/bin/winecfg /usr/local/bin/winecfg
 
 RUN set -eux; \
  locale-gen en_US.UTF-8 && dpkg-reconfigure locales
