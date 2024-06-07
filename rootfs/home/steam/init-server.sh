@@ -33,9 +33,13 @@ term_handler() {
 trap 'term_handler' SIGTERM
 
 echo " "
+echo "Updating SteamCMD files..."
+echo " "
+LD_LIBRARY_PATH="/home/steam/linux32" box86 /home/steam/linux32/steamcmd +quit
+echo " "
 echo "Updating V-Rising Dedicated Server files..."
 echo " "
-LD_LIBRARY_PATH="/home/steam/linux32/" box86 /home/steam/linux32/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
+LD_LIBRARY_PATH="/home/steam/linux32" box86 /home/steam/linux32/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
 echo "steam_appid: $(cat "$server/steam_appid.txt")"
 echo " "
 
