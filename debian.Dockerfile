@@ -70,21 +70,10 @@ ADD rootfs /
  
 # Install packages and Setup steam user
 RUN set -eux; \
-    groupadd -g ${GID} steam && useradd -u ${UID} -m steam -g steam; \
-    chmod 750 /home/steam/healthz.sh /home/steam/init-server.sh; \
-    wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - -C /home/steam; \
-    chown -R steam:steam /home/steam; \
-    chmod +x /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
-
-# Copy compiled box86 binaries
-COPY --from=box86-builder /box /
-# Copy compiled box64 binaries
-COPY --from=box64-builder /box /
-
-VOLUME ["/vrising/server", "/vrising/data"]
-
-USER steam
-WORKDIR /home/steam
+ groupadd -g ${GID} steam && useradd -u ${UID} -m steam -g steam; \
+ chmod 750 /home/steam/healthz.sh /home/steam/init-server.sh; \
+ wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - -C /home/steam; \
+ chown -R steam:steam /home/steam
 
 ARG debian_version=bookworm
 # see: https://dl.winehq.org/wine-builds/debian/dists/<debian_version>/main/binary-amd64/ - e.g.:
@@ -114,7 +103,18 @@ RUN set -eux; \
  chmod +x winetricks; \
  mv winetricks /usr/local/bin/; \
  ln -s /home/steam/wine/bin/wineboot /usr/local/bin/wineboot; \
- ln -s /home/steam/wine/bin/winecfg /usr/local/bin/winecfg
+ ln -s /home/steam/wine/bin/winecfg /usr/local/bin/winecfg; \
+ chmod +x /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
+
+# Copy compiled box86 binaries
+COPY --from=box86-builder /box /
+# Copy compiled box64 binaries
+COPY --from=box64-builder /box /
+
+VOLUME ["/vrising/server", "/vrising/data"]
+
+USER steam
+WORKDIR /home/steam
 
 # Define the health check
 HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \
