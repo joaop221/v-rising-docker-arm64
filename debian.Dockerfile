@@ -58,36 +58,6 @@ RUN set -eux; \
  apt-get clean autoclean; \
  rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists
 
-ARG debian_version=bookworm
-# see: https://dl.winehq.org/wine-builds/debian/dists/<debian_version>/main/binary-amd64/ - e.g.:
-# - https://dl.winehq.org/wine-builds/debian/dists/bookworm/main/binary-amd64/
-# - https://dl.winehq.org/wine-builds/debian/dists/bullseye/main/binary-amd64/
-ARG wine_version="9.0.0.0"
-# devel, staging, or stable
-ARG wine_branch="stable"
-# : -1 (some wine .deb files have -1 tag on the end and some don't)
-ARG wine_tag="-1"
-
-# - wine64 and winetricks - ref https://github.com/ptitSeb/box64/blob/main/docs/X64WINE.md#examples for win64
-RUN set -eux; \
- LNKA="https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/main/binary-amd64/"; \
- DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
- DEB_A2="wine-${wine_branch}_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
- echo -e "Downloading wine . . ."; \
- wget -q ${LNKA}${DEB_A1}; \
- wget -q ${LNKA}${DEB_A2}; \
- echo -e "Extracting wine . . ."; \
- dpkg-deb -x ${DEB_A1} wine-installer; \
- dpkg-deb -x ${DEB_A2} wine-installer; \
- echo -e "Installing wine . . ."; \
- mv wine-installer/opt/wine* /opt/wine; \
- rm -rf ${DEB_A1} ${DEB_A2}; \
- wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
- chmod +x winetricks; \
- mv winetricks /usr/local/bin/; \
- ln -s /opt/wine/bin/wineboot /usr/local/bin/wineboot; \
- ln -s /opt/wine/bin/winecfg /usr/local/bin/winecfg
-
 RUN set -eux; \
  locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 ENV LANG 'en_US.UTF-8'
@@ -115,6 +85,36 @@ VOLUME ["/vrising/server", "/vrising/data"]
 
 USER steam
 WORKDIR /home/steam
+
+ARG debian_version=bookworm
+# see: https://dl.winehq.org/wine-builds/debian/dists/<debian_version>/main/binary-amd64/ - e.g.:
+# - https://dl.winehq.org/wine-builds/debian/dists/bookworm/main/binary-amd64/
+# - https://dl.winehq.org/wine-builds/debian/dists/bullseye/main/binary-amd64/
+ARG wine_version="9.0.0.0"
+# devel, staging, or stable
+ARG wine_branch="stable"
+# : -1 (some wine .deb files have -1 tag on the end and some don't)
+ARG wine_tag="-1"
+
+# - wine64 and winetricks - ref https://github.com/ptitSeb/box64/blob/main/docs/X64WINE.md#examples for win64
+RUN set -eux; \
+ LNKA="https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/main/binary-amd64/"; \
+ DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
+ DEB_A2="wine-${wine_branch}_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
+ echo -e "Downloading wine . . ."; \
+ wget -q ${LNKA}${DEB_A1}; \
+ wget -q ${LNKA}${DEB_A2}; \
+ echo -e "Extracting wine . . ."; \
+ dpkg-deb -x ${DEB_A1} wine-installer; \
+ dpkg-deb -x ${DEB_A2} wine-installer; \
+ echo -e "Installing wine . . ."; \
+ mv wine-installer/opt/wine* /home/steam/wine; \
+ rm -rf ${DEB_A1} ${DEB_A2}; \
+ wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
+ chmod +x winetricks; \
+ mv winetricks /usr/local/bin/; \
+ ln -s /home/steam/wine/bin/wineboot /usr/local/bin/wineboot; \
+ ln -s /home/steam/wine/bin/winecfg /usr/local/bin/winecfg
 
 # Define the health check
 HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \

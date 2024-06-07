@@ -1,2 +1,2 @@
 #!/bin/sh
-WINEPREFIX=/opt/.wine64 WINEARCH=win64 box64 /opt/wine/bin/wine64 \$@
+WINEPREFIX=~/.wine64 WINEARCH=win64 box64 ~/wine/bin/wine64 \$@
