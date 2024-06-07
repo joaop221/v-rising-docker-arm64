@@ -35,7 +35,7 @@ trap 'term_handler' SIGTERM
 echo " "
 echo "Updating SteamCMD files..."
 echo " "
-LD_LIBRARY_PATH="/home/steam/linux32" box86 /home/steam/linux32/steamcmd +quit
+LD_LIBRARY_PATH="/home/steam/linux32" box86 /home/steam/linux32/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
 echo " "
 echo "Updating V-Rising Dedicated Server files..."
 echo " "
@@ -43,7 +43,7 @@ LD_LIBRARY_PATH="/home/steam/linux32" box86 /home/steam/linux32/steamcmd +@sStea
 echo "steam_appid: $(cat "$server/steam_appid.txt")"
 echo " "
 
-mkdir "$data/Settings" 2>/dev/null
+mkdir -p "$data/Settings"
 if [ ! -f "$data/Settings/ServerGameSettings.json" ]; then
 	echo "$data/Settings/ServerGameSettings.json not found. Copying default file."
 	cp "$server/VRisingServer_Data/StreamingAssets/Settings/ServerGameSettings.json" "$data/Settings/" 2>&1
@@ -57,7 +57,7 @@ echo "Starting V Rising Dedicated Server"
 
 if [ -f "/tmp/.X0-lock" ]; then
 	echo "Trying to remove /tmp/.X0-lock"
-	rm /tmp/.X0-lock 2>&1
+	rm -f /tmp/.X0-lock
 fi
 
 echo " "
