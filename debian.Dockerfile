@@ -44,7 +44,7 @@ LABEL maintainer="joaop221"
 # - dependencie packages specified by box64/box86 docs
 RUN set -eux; \
  dpkg --add-architecture armhf && apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
-    wget ca-certificates cabextract xvfb locales \
+    wget ca-certificates cabextract xvfb locales procps netcat-traditional \
     libc6:armhf libstdc++6:armhf libasound2-plugins:arm64 libasound2:arm64 libc6:arm64 \
     libcapi20-3:arm64 libcups2:arm64 libdbus-1-3:arm64 libfontconfig1:arm64 libfreetype6:arm64 libglib2.0-0:arm64 \
     libglu1-mesa:arm64 libgnutls30:arm64 libgphoto2-6:arm64 libgphoto2-port12:arm64 libgsm1:arm64 \
