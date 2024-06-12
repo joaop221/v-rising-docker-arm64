@@ -72,8 +72,15 @@ Xvfb :0 -screen 0 1024x768x16 &
 echo "Launching wine64 V Rising"
 echo " "
 
-DISPLAY=:0.0 wine64 "$server/VRisingServer.exe" -persistentDataPath $data -logFile "/dev/stdout" 2>&1 &
+logfile="$(date +%s)-VRisingServer.log"
+if [ ! -f "/tmp/$logfile" ]; then
+	echo "Creating /tmp/$logfile"
+	touch "/tmp/$logfile"
+fi
+
+DISPLAY=:0.0 wine64 "$server/VRisingServer.exe" -persistentDataPath $data -logFile "/tmp/$logfile" 2>&1 &
 # Gets the PID of the last command
 ServerPID=$!
 
+tail -n 0 -f "/tmp/$logfile" &
 wait $ServerPID
