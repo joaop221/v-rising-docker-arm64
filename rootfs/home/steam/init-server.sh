@@ -50,14 +50,6 @@ echo "steam_appid: $(cat "$server/steam_appid.txt")"
 echo " "
 
 mkdir -p "$data/Settings"
-if [ ! -f "$data/Settings/ServerGameSettings.json" ]; then
-	echo "$data/Settings/ServerGameSettings.json not found. Copying default file."
-	cp "$server/VRisingServer_Data/StreamingAssets/Settings/ServerGameSettings.json" "$data/Settings/" 2>&1
-fi
-if [ ! -f "$data/Settings/ServerHostSettings.json" ]; then
-	echo "$data/Settings/ServerHostSettings.json not found. Copying default file."
-	cp "$server/VRisingServer_Data/StreamingAssets/Settings/ServerHostSettings.json" "$data/Settings/" 2>&1
-fi
 
 echo "Starting V Rising Dedicated Server"
 
