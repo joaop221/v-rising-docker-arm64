@@ -18,7 +18,7 @@ fi
 term_handler() {
 	echo "Shutting down Server"
 
-	PID=$(pgrep -f "wine64 $server/VRisingServer.exe")
+	PID=$(pgrep -of "/usr/local/bin/wine64 $server/VRisingServer.exe")
 	if [[ -z $PID ]]; then
 		echo "Could not find VRisingServer.exe pid. Assuming server is dead..."
 	else
