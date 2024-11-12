@@ -9,7 +9,7 @@ To build this image you need an ARM64 System or enable multi-platform support in
 With this setup done you can proceed to build:
 
 ```bash
-docker buildx build --platform linux/arm64 -t v-rising-docker-arm64:v0.0.16-local -f debian.Dockerfile . --load
+docker buildx build --platform linux/arm64 -t v-rising-docker-arm64:local -f debian.Dockerfile . --load
 ```
 
 > **About buildx:** `--load` will give you an option to load this image at your local images list: [docker builx build reference](https://docs.docker.com/reference/cli/docker/buildx/build/).
@@ -26,7 +26,7 @@ docker run -d --platform linux/arm64 \
     -p 9877:9877/udp \
     -v ./volumes/v-rising/data:/vrising/data \
     -v ./volumes/v-rising/server:/vrising/server \
-    ghcr.io/joaop221/v-rising-docker-arm64:v0.0.16-local
+    ghcr.io/joaop221/v-rising-docker-arm64:main
 ```
 
 Keep in mind that you can include additional environment variables to configure the behavior of game, as described here: [V Rising Dedicated Server Instructions for v1.0.x](https://github.com/StunlockStudios/vrising-dedicated-server-instructions/blob/master/1.0.x/INSTRUCTIONS.md).
