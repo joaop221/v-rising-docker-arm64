@@ -17,14 +17,12 @@ last_modified=$(find "$data" -type f -printf '%T@\n' | sort -rn | head -n 1)
 # Convert the last_modified to an integer (strip off the fractional part)
 last_modified_int=$(printf "%.0f" "$last_modified")
 
-# Calculate the threshold time (last modified time + save interval in seconds seconds)
-last_modified_time=$(($last_modified_int + ${VR_SAVE_INTERVAL:-3}*60))
+# Calculate the threshold time (last modified time + save interval in seconds)
+last_modified_time=$(($last_modified_int + ${VR_SAVE_INTERVAL:-180}))
 
 # Check if the threshold time is less than the current time
 if [ "$last_modified_time" -lt "$(date +%s)" ]; then
-    echo "No files updated in the last ${VR_SAVE_INTERVAL:-"3"} minutes"
-    exit 1
+    echo "No files updated in the last ${VR_SAVE_INTERVAL:-"180"} seconds"
 else
-    echo "Files updated in the last ${VR_SAVE_INTERVAL:-"3"} minutes"
-    exit 0
+    echo "Files updated in the last ${VR_SAVE_INTERVAL:-"180"} seconds"
 fi
