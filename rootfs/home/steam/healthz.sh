@@ -17,8 +17,8 @@ last_modified=$(find "$data" -type f -printf '%T@\n' | sort -rn | head -n 1)
 # Convert the last_modified to an integer (strip off the fractional part)
 last_modified_int=$(printf "%.0f" "$last_modified")
 
-# Calculate save interval in seconds + 60 seconds of any save delay 
-checkup_interval=$((${VR_SAVE_INTERVAL:-180} + 60))
+# Calculate save interval in seconds + 180 seconds of any save delay 
+checkup_interval=$((${VR_SAVE_INTERVAL:-180} + 180))
 
 # Calculate the threshold time (last modified time + checkup interval)
 last_modified_time=$(($last_modified_int + $checkup_interval))
