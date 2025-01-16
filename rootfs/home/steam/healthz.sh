@@ -22,7 +22,8 @@ last_modified_time=$(($last_modified_int + ${VR_SAVE_INTERVAL:-180}))
 
 # Check if the threshold time is less than the current time
 if [ "$last_modified_time" -lt "$(date +%s)" ]; then
-    echo "No files updated in the last ${VR_SAVE_INTERVAL:-"180"} seconds"
+    echo "No files updated in the last ${VR_SAVE_INTERVAL:-"180"} seconds" >&2
+    exit 1
 else
     echo "Files updated in the last ${VR_SAVE_INTERVAL:-"180"} seconds"
 fi
