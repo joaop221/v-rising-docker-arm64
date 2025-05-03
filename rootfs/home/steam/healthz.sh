@@ -9,7 +9,7 @@ echo "Check query port availability"
 nc -nzuv "127.0.0.1" ${VR_QUERY_PORT:-"9877"}
 
 echo "Check for latest save time"
-data=/vrising/data/Saves/v3/${VR_SAVE_NAME:-"world1"}/
+data=/vrising/data/Saves/v4/${VR_SAVE_NAME:-"world1"}/
 
 # Find the last modified time of files in the Saves directory (in seconds since the epoch)
 last_modified=$(find "$data" -type f -printf '%T@\n' | sort -rn | head -n 1)
