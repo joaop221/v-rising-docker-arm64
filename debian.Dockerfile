@@ -91,8 +91,8 @@ RUN set -eux; \
  LNKA="https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/main/binary-amd64/"; \
  DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
  DEB_A2="wine-${wine_branch}_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
- LNKB="https://dl.winehq.org/wine-builds/${id}/dists/${dist}/main/binary-i386/"; \
- DEB_B1="wine-${branch}-i386_${version}~${dist}${tag}_i386.deb"; \
+ LNKB="https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/main/binary-i386/"; \
+ DEB_B1="wine-${wine_branch}-i386_${wine_version}~${debian_version}${wine_tag}_i386.deb"; \
  echo -e "Downloading wine . . ."; \
  wget -q ${LNKA}${DEB_A1}; \
  wget -q ${LNKA}${DEB_A2}; \
