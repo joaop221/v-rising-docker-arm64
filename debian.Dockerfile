@@ -1,6 +1,6 @@
 ARG debian_version=bookworm
 
-FROM debian:${debian_version}-slim as base-builder
+FROM debian:${debian_version}-slim AS base-builder
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
@@ -11,7 +11,7 @@ RUN set -eux; \
  dpkg --add-architecture armhf && apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
     git cmake python3 build-essential gcc-arm-linux-gnueabihf libc6-dev-armhf-cross libc6:armhf libstdc++6:armhf ca-certificates
 
-FROM base-builder as box86-builder
+FROM base-builder AS box86-builder
  
 RUN set -eux; \
  git clone https://github.com/ptitSeb/box86 \
@@ -21,7 +21,7 @@ RUN set -eux; \
     && make -j$(nproc) \
     && make install DESTDIR=/box
 
-FROM base-builder as box64-builder
+FROM base-builder AS box64-builder
 
 RUN set -eux; \
  git clone https://github.com/ptitSeb/box64 \
@@ -61,8 +61,8 @@ RUN set -eux; \
 
 RUN set -eux; \
  locale-gen en_US.UTF-8 && dpkg-reconfigure locales
-ENV LANG 'en_US.UTF-8'
-ENV LANGUAGE 'en_US:en'
+ENV LANG='en_US.UTF-8'
+ENV LANGUAGE='en_US:en'
 
 ARG UID=1001
 ARG GID=1001
@@ -109,8 +109,7 @@ RUN set -eux; \
  mv winetricks /usr/local/bin/; \
  ln -s /home/steam/wine/bin/wineboot /usr/local/bin/wineboot; \
  ln -s /home/steam/wine/bin/winecfg /usr/local/bin/winecfg; \
- chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver; \
- wine wineboot -i && wine64 wineboot -i && env WINEPREFIX=~/.wine64 WINE=~/wine/bin/wine64 winetricks -q arch=64 dotnet48
+ chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
 
 # Copy compiled box86 binaries
 COPY --from=box86-builder /box /
@@ -121,6 +120,9 @@ VOLUME ["/vrising/server", "/vrising/data"]
 
 USER steam
 WORKDIR /home/steam
+
+# run wineboot and winetricks install dotnet 4.8
+RUN wine wineboot -i && wine64 wineboot -i && env WINEPREFIX=~/.wine64 WINE=~/wine/bin/wine64 winetricks -q arch=64 dotnet48
 
 # Define the health check
 HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \
