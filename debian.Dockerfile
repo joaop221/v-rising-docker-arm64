@@ -41,7 +41,7 @@ LABEL maintainer="joaop221"
 # - `cabextract` is needed by winetricks to install most libraries
 # - `xvfb` is needed in wine to spawn display window because some Windows program can't run without it (using `xvfb-run`)
 #   If you are sure you don't need it, feel free to remove
-# - dependencie packages specified by box64/box86 docs
+# - dependencies packages specified by box64/box86 docs
 RUN set -eux; \
  dpkg --add-architecture armhf && dpkg --add-architecture i386 && \
     apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
@@ -91,21 +91,26 @@ RUN set -eux; \
  LNKA="https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/main/binary-amd64/"; \
  DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
  DEB_A2="wine-${wine_branch}_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
+ LNKB="https://dl.winehq.org/wine-builds/${id}/dists/${dist}/main/binary-i386/"; \
+ DEB_B1="wine-${branch}-i386_${version}~${dist}${tag}_i386.deb"; \
  echo -e "Downloading wine . . ."; \
  wget -q ${LNKA}${DEB_A1}; \
  wget -q ${LNKA}${DEB_A2}; \
+ wget -q ${LNKB}${DEB_B1}; \
  echo -e "Extracting wine . . ."; \
  dpkg-deb -x ${DEB_A1} wine-installer; \
  dpkg-deb -x ${DEB_A2} wine-installer; \
+ dpkg-deb -x ${DEB_B1} wine-installer; \
  echo -e "Installing wine . . ."; \
  mv wine-installer/opt/wine* /home/steam/wine; \
- rm -rf ${DEB_A1} ${DEB_A2}; \
+ rm -rf ${DEB_A1} ${DEB_A2} ${DEB_B1}; \
  wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
  chmod +x winetricks; \
  mv winetricks /usr/local/bin/; \
  ln -s /home/steam/wine/bin/wineboot /usr/local/bin/wineboot; \
  ln -s /home/steam/wine/bin/winecfg /usr/local/bin/winecfg; \
- chmod +x /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
+ chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver; \
+ wine wineboot -i && wine64 wineboot -i && env WINEPREFIX=~/.wine64 WINE=~/wine/bin/wine64 winetricks -q arch=64 dotnet48
 
 # Copy compiled box86 binaries
 COPY --from=box86-builder /box /

@@ -1,0 +1,2 @@
+#!/bin/sh
+WINEPREFIX=~/.wine WINEARCH=win32 box86 ~/wine/bin/wine $@
