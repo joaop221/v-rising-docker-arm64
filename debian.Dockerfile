@@ -133,7 +133,8 @@ HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \
     CMD /home/steam/healthz.sh
 
 # Run wine boot and tricks install
-RUN wine64 wineboot -i && BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx && wine64 wineboot -i
+RUN set -eux; \
+    wine64 wineboot -i && WINEPREFIX=~/.wine64 BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx && wine64 wineboot -i
 
 # Run it
 CMD ["/home/steam/init-server.sh"] 
