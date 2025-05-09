@@ -116,8 +116,7 @@ RUN set -eux; \
  wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
  chmod +x winetricks; \
  mv winetricks /usr/local/bin/; \
- chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver; \
- wine64 wineboot -i && BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx && wine64 wineboot -i
+ chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
 
 # Copy compiled box86 binaries
 COPY --from=box86-builder /box /
@@ -132,6 +131,9 @@ WORKDIR /home/steam
 # Define the health check
 HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \
     CMD /home/steam/healthz.sh
+
+# Run wine boot and tricks install
+RUN wine64 wineboot -i && BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx && wine64 wineboot -i
 
 # Run it
 CMD ["/home/steam/init-server.sh"] 
