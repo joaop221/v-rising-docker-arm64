@@ -95,6 +95,7 @@ ARG wine_branch="stable"
 ARG wine_tag="-1"
 
 # - wine64 and winetricks - ref https://github.com/ptitSeb/box64/blob/main/docs/X64WINE.md#examples for win64
+# startup wine, install windows deps and try start again
 RUN set -eux; \
  LNKA="https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/main/binary-amd64/"; \
  DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
@@ -115,9 +116,8 @@ RUN set -eux; \
  wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
  chmod +x winetricks; \
  mv winetricks /usr/local/bin/; \
- ln -s /home/steam/wine/bin/wineboot /usr/local/bin/wineboot; \
- ln -s /home/steam/wine/bin/winecfg /usr/local/bin/winecfg; \
- chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
+ chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver; \
+ wine64 wineboot -i && BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx && wine64 wineboot -i
 
 # Copy compiled box86 binaries
 COPY --from=box86-builder /box /
@@ -128,9 +128,6 @@ VOLUME ["/vrising/server", "/vrising/data"]
 
 USER steam
 WORKDIR /home/steam
-
-# run wineboot and winetricks install dotnet 4.8
-RUN wine64 wineboot -i && env WINEPREFIX=~/.wine64 WINE=~/wine/bin/wine64 winetricks -q arch=64 dotnet48
 
 # Define the health check
 HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \
