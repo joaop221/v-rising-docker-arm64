@@ -45,7 +45,7 @@ LABEL maintainer="joaop221"
 RUN set -eux; \
  dpkg --add-architecture armhf && dpkg --add-architecture i386 && \
     apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
-    wget ca-certificates cabextract xvfb locales procps netcat-traditional libc6:i386 \
+    7zip wget ca-certificates cabextract xvfb locales procps netcat-traditional libc6:i386 \
     libasound2:armhf libc6:armhf libglib2.0-0:armhf libgphoto2-6:armhf libgphoto2-port12:armhf \
     libgstreamer-plugins-base1.0-0:armhf libgstreamer1.0-0:armhf libldap-2.5-0:armhf libopenal1:armhf libpcap0.8:armhf \
     libpulse0:armhf libsane1:armhf libudev1:armhf libusb-1.0-0:armhf libvkd3d1:armhf libx11-6:armhf libxext6:armhf \
@@ -134,7 +134,9 @@ HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \
 
 # Run wine boot and tricks install
 RUN set -eux; \
-    wine64 wineboot -i && WINEPREFIX=~/.wine64 BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx && wine64 wineboot -i
+    wine wineboot -u && wine64 wineboot -u; \
+    BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx; \
+    wine wineboot -i && wine64 wineboot -i
 
 # Run it
 CMD ["/home/steam/init-server.sh"] 
