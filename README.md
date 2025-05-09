@@ -9,7 +9,7 @@ To build this image you need an ARM64 System or enable multi-platform support in
 With this setup done you can proceed to build:
 
 ```bash
-docker buildx build --platform linux/arm64 -t v-rising-docker-arm64:local -f debian.Dockerfile . --load
+docker buildx build --pull --platform linux/arm64 -t v-rising-docker-arm64:local -f debian.Dockerfile . --load
 ```
 
 > **About buildx:** `--load` will give you an option to load this image at your local images list: [docker builx build reference](https://docs.docker.com/reference/cli/docker/buildx/build/).

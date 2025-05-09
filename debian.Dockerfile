@@ -130,7 +130,7 @@ USER steam
 WORKDIR /home/steam
 
 # run wineboot and winetricks install dotnet 4.8
-RUN wine wineboot -i && wine64 wineboot -i && env WINEPREFIX=~/.wine64 WINE=~/wine/bin/wine64 winetricks -q arch=64 dotnet48
+RUN wine64 wineboot -i && env WINEPREFIX=~/.wine64 WINE=~/wine/bin/wine64 winetricks -q arch=64 dotnet48
 
 # Define the health check
 HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \
