@@ -105,10 +105,7 @@ RUN set -eux; \
  wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
  chmod +x winetricks; \
  mv winetricks /usr/local/bin/; \
- rm -f /usr/bin/wine /usr/bin/wine64 /usr/bin/wineboot /usr/bin/winecfg /usr/bin/wineserver; \
  chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
-
-ENV WINE_BRANCH=${wine_branch}
 
 # Copy compiled box86 binaries
 COPY --from=box86-builder /box /
