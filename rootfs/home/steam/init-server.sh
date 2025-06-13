@@ -61,7 +61,7 @@ fi
 echo " "
 echo "Starting Xvfb"
 Xvfb :0 -screen 0 1024x768x16 &
-echo "Launching wine64 V Rising"
+echo "Launching wine V Rising"
 echo " "
 
 logfile="$(date +%s)-VRisingServer.log"
@@ -70,7 +70,7 @@ if [ ! -f "/tmp/$logfile" ]; then
 	touch "/tmp/$logfile"
 fi
 
-wine64 "$server/VRisingServer.exe" -persistentDataPath $data -logFile "/tmp/$logfile" 2>&1 &
+wine "$server/VRisingServer.exe" -persistentDataPath $data -logFile "/tmp/$logfile" 2>&1 &
 # Gets the PID of the last command
 ServerPID=$!
 

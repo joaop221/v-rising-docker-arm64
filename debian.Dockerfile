@@ -27,7 +27,7 @@ RUN set -eux; \
  git clone https://github.com/ptitSeb/box64 \
     && mkdir box64/build \
     && cd box64/build \
-    && cmake .. -DRPI4ARM64=1 -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    && cmake .. -DRPI4ARM64=1 -DARM_DYNAREC=ON -DWOW64=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     && make -j$(nproc) \
     && make install DESTDIR=/box
 
@@ -98,14 +98,18 @@ RUN set -eux; \
  dpkg --add-architecture amd64 && \
  wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key -; \
  wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/winehq-${debian_version}.sources; \
- apt-get update && apt-get install -y --no-install-recommends --no-install-suggests winehq-${wine_branch}:amd64; \
+ apt-get update && apt-get install -y --no-install-recommends --no-install-suggests wine-${wine_branch}; \
  apt-get -y autoremove; \
  apt-get clean autoclean; \
  rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists; \
  wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
  chmod +x winetricks; \
  mv winetricks /usr/local/bin/; \
- chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
+ chmod +x /usr/local/bin/wine /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
+
+ENV WINE_BRANCH=${wine_branch}
+ENV WINEPREFIX="/home/steam/.wine"
+ENV WINEARCH="win64"
 
 # Copy compiled box86 binaries
 COPY --from=box86-builder /box /
@@ -123,9 +127,8 @@ HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \
 
 # Run wine boot and tricks install
 RUN set -eux; \
-    wine64 wineboot -u; \
-    WINEPREFIX=~/.wine64 WINE=wine64 BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx dotnet45; \
-    wine64 wineboot -i
+    wine wineboot -i; \
+    BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx dotnet45
 
 # Run it
 CMD ["/home/steam/init-server.sh"] 
