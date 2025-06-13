@@ -45,26 +45,26 @@ LABEL maintainer="joaop221"
 RUN set -eux; \
  dpkg --add-architecture armhf && dpkg --add-architecture i386 && \
     apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
-    p7zip-full wget ca-certificates cabextract xvfb locales procps netcat-traditional libc6:i386 \
-    libasound2:armhf libc6:armhf libglib2.0-0:armhf libgphoto2-6:armhf libgphoto2-port12:armhf \
+    p7zip-full wget ca-certificates cabextract xvfb locales procps netcat-traditional winbind libc6:i386 \
+    libasound2:armhf libc6:armhf libglib2.0-0:armhf libgphoto2-6:armhf libgphoto2-port12:armhf libtalloc2:armhf \
     libgstreamer-plugins-base1.0-0:armhf libgstreamer1.0-0:armhf libldap-2.5-0:armhf libopenal1:armhf libpcap0.8:armhf \
     libpulse0:armhf libsane1:armhf libudev1:armhf libusb-1.0-0:armhf libvkd3d1:armhf libx11-6:armhf libxext6:armhf \
     libasound2-plugins:armhf ocl-icd-libopencl1:armhf libncurses6:armhf libncurses5:armhf libcap2-bin:armhf libcups2:armhf \
     libdbus-1-3:armhf libfontconfig1:armhf libfreetype6:armhf libglu1-mesa:armhf libglu1:armhf libgnutls30:armhf \
-    libgssapi-krb5-2:armhf libkrb5-3:armhf libodbc1:armhf libosmesa6:armhf libsdl2-2.0-0:armhf libv4l-0:armhf \
-    libxcomposite1:armhf libxcursor1:armhf libxfixes3:armhf libxi6:armhf libxinerama1:armhf libxrandr2:armhf \
+    libgssapi-krb5-2:armhf libkrb5-3:armhf libodbc1:armhf libosmesa6:armhf libsdl2-2.0-0:armhf libv4l-0:armhf libtevent0t64:armhf \
+    libxcomposite1:armhf libxcursor1:armhf libxfixes3:armhf libxi6:armhf libxinerama1:armhf libxrandr2:armhf libwbclient0:armhf \
     libxrender1:armhf libxxf86vm1:armhf libcap2-bin:armhf libsasl2-2:armhf libsasl2-modules-db:armhf libgtk-3-0:armhf \
-    libstdc++6:armhf libgtk-3-common:armhf libcolord2:armhf libcairo2:armhf libcups2:armhf \
-    libasound2-plugins:arm64 libasound2:arm64 libc6:arm64 libldap-2.5-0:arm64 libopenal1:arm64 \
+    libstdc++6:armhf libgtk-3-common:armhf libcolord2:armhf libcairo2:armhf libcups2:armhf libnss-winbind:armhf \
+    libasound2-plugins:arm64 libasound2:arm64 libc6:arm64 libldap-2.5-0:arm64 libopenal1:arm64 libtalloc2:arm64 \
     libcapi20-3:arm64 libcups2:arm64 libdbus-1-3:arm64 libfontconfig1:arm64 libfreetype6:arm64 libglib2.0-0:arm64 \
     libglu1-mesa:arm64 libgnutls30:arm64 libgphoto2-6:arm64 libgphoto2-port12:arm64 libgsm1:arm64 libvkd3d1:arm64 \
     libgssapi-krb5-2:arm64 libgstreamer-plugins-base1.0-0:arm64 libgstreamer1.0-0:arm64 libjpeg62-turbo:arm64 \
     libkrb5-3:arm64 libncurses6:arm64 libncurses5:arm64 libodbc1:arm64 libosmesa6:arm64 libpcap0.8:arm64 \
-    libpulse0:arm64 libsane1:arm64 libsdl2-2.0-0:arm64 libtiff6:arm64 libudev1:arm64 libusb-1.0-0:arm64 \
+    libpulse0:arm64 libsane1:arm64 libsdl2-2.0-0:arm64 libtiff6:arm64 libudev1:arm64 libusb-1.0-0:arm64 libwbclient0:arm64 \
     libv4l-0:arm64 libx11-6:arm64 libxcomposite1:arm64 libxcursor1:arm64 libxext6:arm64 libxfixes3:arm64 \
     libxi6:arm64 libxinerama1:arm64 libxrandr2:arm64 libxrender1:arm64 libxslt1.1:arm64 libxxf86vm1:arm64 \
     ocl-icd-libopencl1:arm64 libpng16-16:arm64 libsasl2-2:arm64 libsasl2-modules-db:arm64 libgtk-3-0:arm64 \
-    libgtk-3-common:arm64 libcolord2:arm64 libcairo2:arm64 libcups2:arm64; \
+    libgtk-3-common:arm64 libcolord2:arm64 libcairo2:arm64 libcups2:arm64 libnss-winbind:arm64 libtevent0t64:arm64; \
  apt-get -y autoremove; \
  apt-get clean autoclean; \
  rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists
@@ -138,7 +138,7 @@ HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \
 # Run wine boot and tricks install
 RUN set -eux; \
     wine64 wineboot -u; \
-    WINEPREFIX=~/.wine64 WINE=wine64 BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx; \
+    WINEPREFIX=~/.wine64 WINE=wine64 BOX86_NOBANNER=1 winetricks -q arch=64 comctl32ocx comdlg32ocx dotnet45; \
     wine64 wineboot -i
 
 # Run it
