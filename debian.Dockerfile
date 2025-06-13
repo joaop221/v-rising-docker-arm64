@@ -51,7 +51,7 @@ RUN set -eux; \
     libpulse0:armhf libsane1:armhf libudev1:armhf libusb-1.0-0:armhf libvkd3d1:armhf libx11-6:armhf libxext6:armhf \
     libasound2-plugins:armhf ocl-icd-libopencl1:armhf libncurses6:armhf libncurses5:armhf libcap2-bin:armhf libcups2:armhf \
     libdbus-1-3:armhf libfontconfig1:armhf libfreetype6:armhf libglu1-mesa:armhf libglu1:armhf libgnutls30:armhf \
-    libgssapi-krb5-2:armhf libkrb5-3:armhf libodbc1:armhf libosmesa6:armhf libsdl2-2.0-0:armhf libv4l-0:armhf libtevent0t64:armhf \
+    libgssapi-krb5-2:armhf libkrb5-3:armhf libodbc1:armhf libosmesa6:armhf libsdl2-2.0-0:armhf libv4l-0:armhf \
     libxcomposite1:armhf libxcursor1:armhf libxfixes3:armhf libxi6:armhf libxinerama1:armhf libxrandr2:armhf libwbclient0:armhf \
     libxrender1:armhf libxxf86vm1:armhf libcap2-bin:armhf libsasl2-2:armhf libsasl2-modules-db:armhf libgtk-3-0:armhf \
     libstdc++6:armhf libgtk-3-common:armhf libcolord2:armhf libcairo2:armhf libcups2:armhf libnss-winbind:armhf \
@@ -64,7 +64,7 @@ RUN set -eux; \
     libv4l-0:arm64 libx11-6:arm64 libxcomposite1:arm64 libxcursor1:arm64 libxext6:arm64 libxfixes3:arm64 \
     libxi6:arm64 libxinerama1:arm64 libxrandr2:arm64 libxrender1:arm64 libxslt1.1:arm64 libxxf86vm1:arm64 \
     ocl-icd-libopencl1:arm64 libpng16-16:arm64 libsasl2-2:arm64 libsasl2-modules-db:arm64 libgtk-3-0:arm64 \
-    libgtk-3-common:arm64 libcolord2:arm64 libcairo2:arm64 libcups2:arm64 libnss-winbind:arm64 libtevent0t64:arm64; \
+    libgtk-3-common:arm64 libcolord2:arm64 libcairo2:arm64 libcups2:arm64 libnss-winbind:arm64; \
  apt-get -y autoremove; \
  apt-get clean autoclean; \
  rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists
