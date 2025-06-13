@@ -98,7 +98,10 @@ RUN set -eux; \
  dpkg --add-architecture amd64 && \
  wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key -; \
  wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/winehq-${debian_version}.sources; \
- apt update && apt install -y --no-install-recommends --no-install-suggests winehq-${wine_branch}:amd64; \
+ apt-get update && apt-get install -y --no-install-recommends --no-install-suggests winehq-${wine_branch}:amd64; \
+ apt-get -y autoremove; \
+ apt-get clean autoclean; \
+ rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists; \
  wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
  chmod +x winetricks; \
  mv winetricks /usr/local/bin/; \
