@@ -45,7 +45,7 @@ LABEL maintainer="joaop221"
 RUN set -eux; \
  dpkg --add-architecture armhf && dpkg --add-architecture i386 && \
     apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
-    p7zip-full wget ca-certificates cabextract xvfb locales procps netcat-traditional winbind libc6:i386 \
+    p7zip-full wget ca-certificates cabextract xvfb locales procps netcat-traditional winbind gpg libc6:i386 \
     libasound2:armhf libc6:armhf libglib2.0-0:armhf libgphoto2-6:armhf libgphoto2-port12:armhf libtalloc2:armhf \
     libgstreamer-plugins-base1.0-0:armhf libgstreamer1.0-0:armhf libldap-2.5-0:armhf libopenal1:armhf libpcap0.8:armhf \
     libpulse0:armhf libsane1:armhf libudev1:armhf libusb-1.0-0:armhf libvkd3d1:armhf libx11-6:armhf libxext6:armhf \
@@ -80,46 +80,32 @@ ARG GID=1001
 
 ADD rootfs /
  
-# Install packages and Setup steam user
+# Setup steam user
 RUN set -eux; \
  groupadd -g ${GID} steam && useradd -u ${UID} -m steam -g steam; \
  chmod 750 /home/steam/healthz.sh /home/steam/init-server.sh; \
  wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - -C /home/steam; \
  chown -R steam:steam /home/steam
 
+# - wine64 and winetricks 
+#   - ref https://github.com/ptitSeb/box64/blob/main/docs/X64WINE.md#examples for win64
+#   - ref https://gitlab.winehq.org/wine/wine/-/wikis/Debian-Ubuntu
 ARG debian_version=bookworm
-# see: https://dl.winehq.org/wine-builds/debian/dists/<debian_version>/main/binary-amd64/ - e.g.:
-# - https://dl.winehq.org/wine-builds/debian/dists/bookworm/main/binary-amd64/
-# - https://dl.winehq.org/wine-builds/debian/dists/bullseye/main/binary-amd64/
-ARG wine_version="9.0.0.0"
 # devel, staging, or stable
 ARG wine_branch="stable"
-# : -1 (some wine .deb files have -1 tag on the end and some don't)
-ARG wine_tag="-1"
 
-# - wine64 and winetricks - ref https://github.com/ptitSeb/box64/blob/main/docs/X64WINE.md#examples for win64
-# startup wine, install windows deps and try start again
 RUN set -eux; \
- LNKA="https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/main/binary-amd64/"; \
- DEB_A1="wine-${wine_branch}-amd64_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
- DEB_A2="wine-${wine_branch}_${wine_version}~${debian_version}${wine_tag}_amd64.deb"; \
- LNKB="https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/main/binary-i386/"; \
- DEB_B1="wine-${wine_branch}-i386_${wine_version}~${debian_version}${wine_tag}_i386.deb"; \
- echo -e "Downloading wine . . ."; \
- wget -q ${LNKA}${DEB_A1}; \
- wget -q ${LNKA}${DEB_A2}; \
- wget -q ${LNKB}${DEB_B1}; \
- echo -e "Extracting wine . . ."; \
- dpkg-deb -x ${DEB_A1} wine-installer; \
- dpkg-deb -x ${DEB_A2} wine-installer; \
- dpkg-deb -x ${DEB_B1} wine-installer; \
- echo -e "Installing wine . . ."; \
- mv wine-installer/opt/wine* /home/steam/wine; \
- rm -rf ${DEB_A1} ${DEB_A2} ${DEB_B1}; \
+ dpkg --add-architecture amd64 && \
+ wget -O - https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key -; \
+ wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/winehq-${debian_version}.sources; \
+ apt update && apt install -y --no-install-recommends --no-install-suggests winehq-${wine_branch}:amd64; \
  wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
  chmod +x winetricks; \
  mv winetricks /usr/local/bin/; \
+ rm -f /usr/bin/wine /usr/bin/wine64 /usr/bin/wineboot /usr/bin/winecfg /usr/bin/wineserver; \
  chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
+
+ENV WINE_BRANCH=${wine_branch}
 
 # Copy compiled box86 binaries
 COPY --from=box86-builder /box /

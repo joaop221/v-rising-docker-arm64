@@ -1,2 +1,2 @@
 #!/bin/sh
-WINEPREFIX=~/.wine WINEARCH=win32 box86 ~/wine/bin/wine $@
+WINEPREFIX=~/.wine WINEARCH=win32 box86 /opt/wine-${WINE_BRANCH}/bin/wine $@
