@@ -70,7 +70,7 @@ if [ ! -f "/tmp/$logfile" ]; then
 	touch "/tmp/$logfile"
 fi
 
-wine "$server/VRisingServer.exe" -persistentDataPath $data -logFile "/tmp/$logfile" 2>&1 &
+wine64 "$server/VRisingServer.exe" -persistentDataPath $data -logFile "/tmp/$logfile" 2>&1 &
 # Gets the PID of the last command
 ServerPID=$!
 

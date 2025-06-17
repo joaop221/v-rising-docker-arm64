@@ -1,4 +1,4 @@
-# v-rising-docker-arm64
+# V-rising-docker-arm64
 
 V Rising Dedicated Server inside Docker ARM64 container.
 
@@ -35,7 +35,7 @@ Keep in mind that you can include additional environment variables to configure 
 
 To download the game we need to emulate [steamcmd](https://www.steamcmd.net/) architecture, this is made using [box86](https://github.com/ptitSeb/box86).
 
-And to run V Rising Server we need another combination of packages [box64 + wine64](https://github.com/ptitSeb/box64?tab=readme-ov-file#notes-about-wine).
+And to run V Rising Server we need another combination of packages [box64 + wine](https://github.com/ptitSeb/box64/blob/main/docs/WINE.md).
 
 ## Credits and Links
 
@@ -43,4 +43,6 @@ This image was based on implementation and docs available in:
 
 - [V Rising Dedicated Server Instructions](https://github.com/StunlockStudios/vrising-dedicated-server-instructions);
 - [TrueOsiris/docker-vrising](https://github.com/TrueOsiris/docker-vrising);
+- [ptitSeb/box64](https://github.com/ptitSeb/box64);
+- [ptitSeb/box86](https://github.com/ptitSeb/box86);
 - [gogoout/vrising-arm64](https://github.com/gogoout/vrising-server-arm64).
