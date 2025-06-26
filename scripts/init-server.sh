@@ -18,7 +18,7 @@ fi
 term_handler() {
 	echo "Shutting down Server"
 
-	PID=$(pgrep -of "/usr/local/bin/wine64 $server/VRisingServer.exe")
+	PID=$(pgrep -of "/opt/wine-stable/bin/wine64 $server/VRisingServer.exe")
 	if [[ -z $PID ]]; then
 		echo "Could not find VRisingServer.exe pid. Assuming server is dead..."
 	else
@@ -35,17 +35,16 @@ trap 'term_handler' SIGTERM
 echo " "
 echo "Updating SteamCMD files..."
 echo " "
-export LD_LIBRARY_PATH="/home/steam/linux32:"
 status_steamcmd=1
 
 while [ $status_steamcmd -ne 0 ]; do
-	box86 /home/steam/linux32/steamcmd +quit
+	/home/steam/steamcmd.sh +quit
 	status_steamcmd=$?
 done
 echo " "
 echo "Updating V-Rising Dedicated Server files..."
 echo " "
-box86 /home/steam/linux32/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
+/home/steam/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
 echo "steam_appid: $(cat "$server/steam_appid.txt")"
 echo " "
 
@@ -70,7 +69,7 @@ if [ ! -f "/tmp/$logfile" ]; then
 	touch "/tmp/$logfile"
 fi
 
-wine64 "$server/VRisingServer.exe" -persistentDataPath $data -logFile "/tmp/$logfile" 2>&1 &
+/opt/wine-stable/bin/wine64 "$server/VRisingServer.exe" -persistentDataPath $data -logFile "/tmp/$logfile" 2>&1 &
 # Gets the PID of the last command
 ServerPID=$!
 

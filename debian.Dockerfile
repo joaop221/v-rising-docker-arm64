@@ -6,6 +6,8 @@ ENV DEBIAN_FRONTEND="noninteractive"
 
 LABEL maintainer="joaop221"
 
+ARG debian_version=bookworm
+
 # Install libraries needed to run box and v-rising
 # - `cabextract` is needed by winetricks to install most libraries
 # - `xvfb` is needed in wine to spawn display window because some Windows program can't run without it (using `xvfb-run`)
@@ -15,14 +17,16 @@ LABEL maintainer="joaop221"
 RUN set -eux; \
  dpkg --add-architecture armhf && dpkg --add-architecture i386 && dpkg --add-architecture amd64; \
     apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
-    p7zip-full wget ca-certificates cabextract xvfb locales procps netcat-traditional winbind gpg libc6:i386 \
-    wine:amd64 wine32:i386 wine64:amd64 libwine:amd64 libwine:i386 fonts-wine:amd64; \
+    p7zip-full wget ca-certificates cabextract xvfb locales procps netcat-traditional winbind gpg; \
  locale-gen en_US.UTF-8 && dpkg-reconfigure locales; \
  wget -qO- "https://pi-apps-coders.github.io/box64-debs/KEY.gpg" | gpg --dearmor -o /usr/share/keyrings/box64-archive-keyring.gpg; \
  wget -qO- "https://pi-apps-coders.github.io/box86-debs/KEY.gpg" | gpg --dearmor -o /usr/share/keyrings/box86-archive-keyring.gpg; \
+ wget -qO- "https://dl.winehq.org/wine-builds/winehq.key" | gpg --dearmor -o /etc/apt/keyrings/winehq-archive.key; \
+ wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/winehq-${debian_version}.sources; \
  echo "deb [signed-by=/usr/share/keyrings/box64-archive-keyring.gpg] https://Pi-Apps-Coders.github.io/box64-debs/debian ./" | tee /etc/apt/sources.list.d/box64.list; \
  echo "deb [signed-by=/usr/share/keyrings/box86-archive-keyring.gpg] https://Pi-Apps-Coders.github.io/box86-debs/debian ./" | tee /etc/apt/sources.list.d/box86.list; \
- apt-get update && apt-get install -y --no-install-recommends --no-install-suggests box64-generic-arm box86-generic-arm:armhf; \
+ apt-get update && apt-get install -y --install-recommends --no-install-suggests box64-rpi4arm64 box86-rpi4arm64:armhf \
+    wine-stable-amd64 wine-stable-i386:i386 wine-stable:amd64 winehq-stable; \
  apt-get -y autoremove; \
  apt-get clean autoclean; \
  rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists
@@ -30,17 +34,28 @@ RUN set -eux; \
 ENV LANG='en_US.UTF-8'
 ENV LANGUAGE='en_US:en'
 
+ENV BOX86_PATH=~/wine/bin/
+ENV BOX86_LD_LIBRARY_PATH=~/wine/lib/wine/i386-unix/:/lib/i386-linux-gnu:/lib/aarch64-linux-gnu/
+ENV BOX64_PATH=~/wine64/bin/
+ENV BOX64_LD_LIBRARY_PATH=~/wine64/lib/i386-unix/:~/wine64/lib/wine/x86_64-unix/:/lib/i386-linux-gnu/:/lib/x86_64-linux-gnu:/lib/aarch64-linux-gnu/
+
+ENV WINEARCH=win64 WINEPREFIX=/home/steam/.wine
+ENV WINEDLLOVERRIDES="mscoree,mshtml="
+
 ENV DISPLAY=:0
+ENV DISPLAY_WIDTH=1024
+ENV DISPLAY_HEIGHT=768
+ENV DISPLAY_DEPTH=16
+
+ENV AUTO_UPDATE=1
+ENV XVFB=1
 
 ARG UID=1001
 ARG GID=1001
-
-ADD rootfs /
  
 # Setup steam user
 RUN set -eux; \
  groupadd -g ${GID} steam && useradd -u ${UID} -m steam -g steam; \
- chmod 750 /home/steam/healthz.sh /home/steam/init-server.sh; \
  wget -qO - "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxvf - -C /home/steam; \
  chown -R steam:steam /home/steam
 
@@ -48,8 +63,7 @@ RUN set -eux; \
 RUN set -eux; \
  wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks; \
  chmod +x winetricks; \
- mv winetricks /usr/local/bin/; \
- chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
+ mv winetricks /usr/local/bin/
 
 VOLUME ["/vrising/server", "/vrising/data"]
 
@@ -60,11 +74,23 @@ WORKDIR /home/steam
 HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=10m \
     CMD /home/steam/healthz.sh
 
-# Run wine boot and tricks install
+# Run steamcmd to update the server
+RUN set -ux; \
+    status_steamcmd=1; \
+    while [ $status_steamcmd -ne 0 ]; do \
+        /home/steam/steamcmd.sh +quit; \
+	    status_steamcmd=$?; \
+    done
+
+# Run boot wine and tricks install 
 RUN set -eux; \
-    wine wineboot -i; \
-    wine64 wineboot -i; \
-    winetricks -q arch=64 comctl32ocx comdlg32ocx dotnet45
+    /opt/wine-stable/bin/wine64 wineboot; \
+    BOX86_NOBANNER=1 WINE=/opt/wine-stable/bin/wine64 winetricks -q arch=64 comctl32ocx comdlg32ocx dotnet45 corefonts d3dx10 d3dx9_36 dxvk
+
+ADD --chown=steam:steam scripts /home/steam/
+
+RUN set -eux; \
+    chmod +x /home/steam/init-server.sh /home/steam/healthz.sh
 
 # Run it
 CMD ["/home/steam/init-server.sh"] 
