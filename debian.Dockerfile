@@ -34,10 +34,10 @@ RUN set -eux; \
 ENV LANG='en_US.UTF-8'
 ENV LANGUAGE='en_US:en'
 
-ENV BOX86_PATH=~/wine/bin/
-ENV BOX86_LD_LIBRARY_PATH=~/wine/lib/wine/i386-unix/:/lib/i386-linux-gnu:/lib/aarch64-linux-gnu/
-ENV BOX64_PATH=~/wine64/bin/
-ENV BOX64_LD_LIBRARY_PATH=~/wine64/lib/i386-unix/:~/wine64/lib/wine/x86_64-unix/:/lib/i386-linux-gnu/:/lib/x86_64-linux-gnu:/lib/aarch64-linux-gnu/
+ENV BOX86_PATH=/opt/wine-stable/bin/
+ENV BOX86_LD_LIBRARY_PATH=/opt/wine-stable/lib/wine/i386-unix/:/lib/i386-linux-gnu:/lib/aarch64-linux-gnu/
+ENV BOX64_PATH=/opt/wine-stable/bin/
+ENV BOX64_LD_LIBRARY_PATH=/opt/wine-stable/lib/i386-unix/:/opt/wine-stable/lib64/wine/x86_64-unix/:/lib/i386-linux-gnu/:/lib/x86_64-linux-gnu:/lib/aarch64-linux-gnu/
 
 ENV WINEARCH=win64 WINEPREFIX=/home/steam/.wine
 ENV WINEDLLOVERRIDES="mscoree,mshtml="

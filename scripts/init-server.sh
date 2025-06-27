@@ -38,13 +38,13 @@ echo " "
 status_steamcmd=1
 
 while [ $status_steamcmd -ne 0 ]; do
-	box86 /home/steam/steamcmd.sh +quit
+	box86 /home/steam/linux32/steamcmd +quit
 	status_steamcmd=$?
 done
 echo " "
 echo "Updating V-Rising Dedicated Server files..."
 echo " "
-box86 /home/steam/steamcmd.sh +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
+box86 /home/steam/linux32/steamcmd +@sSteamCmdForcePlatformType windows +force_install_dir "$server" +login anonymous +app_update 1829350 validate +quit
 echo "steam_appid: $(cat "$server/steam_appid.txt")"
 echo " "
 
