@@ -87,7 +87,7 @@ RUN set -ux; \
 # Run boot wine and tricks install 
 RUN set -eux; \
     /opt/wine-stable/bin/wine64 wineboot; \
-    BOX86_NOBANNER=1 WINE=/opt/wine-stable/bin/wine64 winetricks -q arch=64 comctl32ocx comdlg32ocx dotnet45 corefonts d3dx10 d3dx9_36 dxvk
+    BOX86_NOBANNER=1 WINE=/opt/wine-stable/bin/wine64 winetricks -q arch=64 comctl32ocx comdlg32ocx dotnet472 corefonts d3dx10 d3dx9_36 dxvk
 
 ADD --chown=steam:steam scripts /home/steam/
 
