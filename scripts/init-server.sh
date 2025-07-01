@@ -59,7 +59,8 @@ fi
 
 echo " "
 echo "Starting Xvfb"
-Xvfb :0 -screen 0 1024x768x16 &
+Xvfb ${DISPLAY} -screen 0 ${DISPLAY_WIDTH}x${DISPLAY_HEIGHT}x${DISPLAY_DEPTH} &
+
 echo "Launching wine V Rising"
 echo " "
 
