@@ -19,7 +19,7 @@ RUN set -eux; \
     apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
     p7zip-full wget ca-certificates cabextract xvfb locales procps netcat-traditional winbind gpg \
     libc6:armhf libc6:arm64 libc6:i386 libc6:amd64 libxi6:arm64 libxinerama1:arm64 \
-    libxcursor1:arm64 libxcomposite1:arm64 libvulkan1:arm64; \
+    libxcursor1:arm64 libxcomposite1:arm64 mesa-vulkan-drivers:arm64; \
  locale-gen en_US.UTF-8 && dpkg-reconfigure locales; \
  wget -qO- "https://pi-apps-coders.github.io/box64-debs/KEY.gpg" | gpg --dearmor -o /usr/share/keyrings/box64-archive-keyring.gpg; \
  wget -qO- "https://pi-apps-coders.github.io/box86-debs/KEY.gpg" | gpg --dearmor -o /usr/share/keyrings/box86-archive-keyring.gpg; \
@@ -87,7 +87,7 @@ RUN set -ux; \
 # Run boot wine and tricks install 
 RUN set -eux; \
     /opt/wine-stable/bin/wine64 wineboot; \
-    BOX86_NOBANNER=1 WINE=/opt/wine-stable/bin/wine64 winetricks -q arch=64 comctl32ocx comdlg32ocx dotnet40 dotnet45 corefonts d3dx10 d3dx9_36 dxvk
+    BOX86_NOBANNER=1 WINE=/opt/wine-stable/bin/wine64 winetricks -q arch=64 comctl32ocx comdlg32ocx dotnet48 corefonts d3dx10 d3dx9_36 dxvk
 
 ADD --chown=steam:steam scripts /home/steam/
 
