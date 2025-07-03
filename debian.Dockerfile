@@ -42,6 +42,7 @@ ENV BOX64_PATH=/opt/wine-stable/bin/
 ENV BOX64_LD_LIBRARY_PATH=/opt/wine-stable/lib/i386-unix/:/opt/wine-stable/lib64/wine/x86_64-unix/:/lib/i386-linux-gnu/:/lib/x86_64-linux-gnu:/lib/aarch64-linux-gnu/
 
 ENV WINEARCH=win64 WINEPREFIX=/home/steam/.wine
+ENV WINEDLLOVERRIDES="mscoree,mshtml="
 
 ENV DISPLAY=:0
 ENV DISPLAY_WIDTH=1024
