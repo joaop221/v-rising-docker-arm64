@@ -18,7 +18,7 @@ fi
 term_handler() {
 	echo "Shutting down Server"
 
-	PID=$(pgrep -of "box64 wine $server/VRisingServer.exe")
+	PID=$(pgrep -of "/opt/wine-stable/bin/wine64 $server/VRisingServer.exe")
 	if [[ -z $PID ]]; then
 		echo "Could not find VRisingServer.exe pid. Assuming server is dead..."
 	else
@@ -70,7 +70,7 @@ if [ ! -f "/tmp/$logfile" ]; then
 	touch "/tmp/$logfile"
 fi
 
-box64 wine "$server/VRisingServer.exe" -persistentDataPath $data -logFile "/tmp/$logfile" 2>&1 &
+box64 /opt/wine-stable/bin/wine64 "$server/VRisingServer.exe" -persistentDataPath $data -logFile "/tmp/$logfile" 2>&1 &
 # Gets the PID of the last command
 ServerPID=$!
 
