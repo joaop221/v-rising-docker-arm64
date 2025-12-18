@@ -27,7 +27,7 @@ RUN set -eux; \
  wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/${debian_version}/winehq-${debian_version}.sources; \
  echo "deb [signed-by=/usr/share/keyrings/box64-archive-keyring.gpg] https://Pi-Apps-Coders.github.io/box64-debs/debian ./" | tee /etc/apt/sources.list.d/box64.list; \
  echo "deb [signed-by=/usr/share/keyrings/box86-archive-keyring.gpg] https://Pi-Apps-Coders.github.io/box86-debs/debian ./" | tee /etc/apt/sources.list.d/box86.list; \
- apt-get update && apt-get install -y --install-recommends --no-install-suggests box64-rpi4arm64 box86-rpi4arm64:armhf \
+ apt-get update && apt-get install -y --install-recommends --no-install-suggests box64-generic-arm box86-generic-arm:armhf \
     wine-stable-amd64 wine-stable-i386:i386 wine-stable:amd64 winehq-stable; \
  apt-get -y autoremove; \
  apt-get clean autoclean; \
