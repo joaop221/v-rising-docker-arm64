@@ -38,8 +38,9 @@ ENV LANGUAGE='en_US:en'
 
 ENV BOX86_PATH=/opt/wine-stable/bin/
 ENV BOX86_LD_LIBRARY_PATH=/opt/wine-stable/lib/wine/i386-unix/:/lib/i386-linux-gnu:/lib/aarch64-linux-gnu/
-ENV BOX64_DYNAREC_STRONGMEM=1
-ENV BOX64_DYNAREC_BIGBLOCK=0
+ENV BOX64_DYNAREC_STRONGMEM=2
+ENV BOX64_DYNAREC_BLEEDING_EDGE=1
+ENV BOX64_DYNAREC_BIGBLOCK=3
 ENV BOX64_PATH=/opt/wine-stable/bin/
 ENV BOX64_LD_LIBRARY_PATH=/opt/wine-stable/lib/i386-unix/:/opt/wine-stable/lib64/wine/x86_64-unix/:/lib/i386-linux-gnu/:/lib/x86_64-linux-gnu:/lib/aarch64-linux-gnu/
 
